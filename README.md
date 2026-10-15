@@ -266,5 +266,19 @@ Then browse to `http://whoami.k8s-labs.server.local:30080`.
 | Gateway (HTTP) | `http://*.k8s-labs.server.local:30080` |
 | Default StorageClass | `local-path` → `/mnt/k8s-data` (80 GB) |
 
+## Verified build (2026-10-15)
+
+| Component | Version |
+|---|---|
+| Ubuntu | 24.04.5 LTS, kernel 6.8.0-147 |
+| containerd | v2.4.2 |
+| Kubernetes | v1.35.9 (kubeadm / kubelet / kubectl), crictl v1.35.0 |
+| Calico | v3.33.0 (includes goldmane + whisker) |
+| local-path-provisioner | latest at build time, path `/mnt/k8s-data` (100G XFS on `vg_k8s/lv_data`) |
+| Helm | v3.22.0 |
+| Envoy Gateway | v1.9.2 |
+
+All gates 0–6b passed. Actual VM disks: sda 50G (OS), sdb 100G (PV).
+
 ## Do not commit
 `/etc/kubernetes/admin.conf`, `~/.kube/config`, and `kubeadm-init.log` contain cluster credentials and join tokens. The `.gitignore` in this repo blocks the common ones.
