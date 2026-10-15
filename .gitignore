@@ -1,0 +1,22 @@
+# Cluster credentials / tokens — never commit
+admin.conf
+*.kubeconfig
+kubeconfig*
+.kube/
+kubeadm-init.log
+*join*.sh
+
+# Downloaded upstream manifests (re-fetched by the runbook)
+custom-resources.yaml
+lpp.yaml
+
+# Secrets & keys
+*.pem
+*.key
+*.crt
+.env
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

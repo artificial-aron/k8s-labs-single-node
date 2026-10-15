@@ -1,0 +1,27 @@
+# kubeadm config: single-node k8s-labs (control plane + worker)
+# Usage: kubeadm init --config manifests/kubeadm-config.yaml
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 10.10.8.210
+  bindPort: 6443
+nodeRegistration:
+  name: k8s-labs.server.local
+  criSocket: unix:///run/containerd/containerd.sock
+  taints: []                 # single node: allow workloads on control plane
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+clusterName: k8s-labs
+controlPlaneEndpoint: k8s-labs.server.local:6443
+apiServer:
+  certSANs:
+    - k8s-labs.server.local
+    - 10.10.8.210
+networking:
+  podSubnet: 10.244.0.0/16
+  serviceSubnet: 10.96.0.0/12
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd

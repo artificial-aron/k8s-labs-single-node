@@ -1,0 +1,50 @@
+# Stage 6 gate: end-to-end test through main-gateway
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: whoami}
+  template:
+    metadata:
+      labels: {app: whoami}
+    spec:
+      containers:
+        - name: whoami
+          image: traefik/whoami
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+  namespace: demo
+spec:
+  selector: {app: whoami}
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: whoami
+  namespace: demo
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: default
+  hostnames: ["whoami.k8s-labs.server.local"]
+  rules:
+    - backendRefs:
+        - name: whoami
+          port: 80
