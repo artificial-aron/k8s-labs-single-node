@@ -83,6 +83,7 @@ EOF
 sysctl --system
 
 apt update && apt -y upgrade
+# If apt reports "dpkg was interrupted": run `dpkg --configure -a && apt -f install -y`, then re-run this line
 apt -y install apt-transport-https ca-certificates curl gpg lvm2 jq
 ```
 
@@ -129,7 +130,7 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 apt update
 
 apt-cache madison kubeadm | head      # optional: list available patches
-apt -y install kubelet kubeadm kubectl
+apt -y install kubelet kubeadm kubectl cri-tools   # cri-tools (crictl) is no longer pulled in automatically
 apt-mark hold kubelet kubeadm kubectl containerd.io
 systemctl enable kubelet
 
